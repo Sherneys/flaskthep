@@ -1,8 +1,21 @@
-from flask import Flask,render_template
+# Flask Setup
+import os
+from flask import Flask, jsonify, request, abort, render_template
+app = Flask(__name__)
+# Google Sheets API Setup
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+
+credential = ServiceAccountCredentials.from_json_keyfile_name("credentials.json",
+                                                              ["https://spreadsheets.google.com/feeds",
+                                                              "https://www.googleapis.com/auth/spreadsheets",
+                                                              "https://www.googleapis.com/auth/drive.file",
+                                                              "https://www.googleapis.com/auth/drive"])
+client = gspread.authorize(credential)
+gsheet = client.open("Vac").sheet1
+
 
 app = Flask(__name__)
-
-app.config['SQLALCHEMY_DATABASE_URI']=['postgres://ojhlnysmrfpdty:8a34eb2d5c3c648cd7260eb9dddfdfcf8aad36d7a5886f736fba60b8cf5592ca@ec2-3-222-49-168.compute-1.amazonaws.com:5432/d339viqu0kank6']
 
 @app.route('/')
 def home():
@@ -13,6 +26,8 @@ def home():
 def hello(name=None):
     return render_template('index.html', name=name)
 
-@app.route("/bank")
-def bank():
-    return "<p>จารหล่อจังครับ</p>"
+# An example GET Route to get all reviews
+@app.route('/all_reviews', methods=["GET"])
+def all_reviews():
+    print(gsheet.get_all_records())
+    return jsonify(gsheet.get_all_records())
