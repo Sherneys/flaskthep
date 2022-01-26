@@ -7,7 +7,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 credential = ServiceAccountCredentials.from_json_keyfile_name("credentials.json",
-                                                              ["https://spreadsheets.google.com/feeds",
+                                                             ["https://spreadsheets.google.com/feeds",
                                                               "https://www.googleapis.com/auth/spreadsheets",
                                                               "https://www.googleapis.com/auth/drive.file",
                                                               "https://www.googleapis.com/auth/drive"])
@@ -19,7 +19,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "<p>สวัดดีครับท่านสมาชิกชมรม</p>"
+    return render_template('index.html')
 
 @app.route('/hello/')
 @app.route('/hello/<name>')

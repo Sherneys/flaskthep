@@ -1,7 +1,35 @@
 <!doctype html>
-<title>Hello from Flask</title>
-{% if name %}
-  <h1>Hello {{ name }}!</h1>
-{% else %}
-  <h1>Hello, World!</h1>
-{% endif %}
+<form action="submit" method="get">
+  <h1>แบบสอบถามวัคซีน</h1>
+  
+  <label for="age">อายุ</label>
+  <input type="number" name="age" id="age">
+
+  <label for="sex">เพศ</label>
+  <select name="sex" id="sex">
+    <option value="male">ชาย</option>
+    <option value="female">หญิง</option>
+  </select>
+
+  <section>
+    <input type="checkbox" name="chronic1" id="chronic1">
+    <label for="chronic1">โรคประจำตัว1</label>
+
+    <input type="checkbox" name="chronic1" id="chronic2">
+    <label for="chronic2">โรคประจำตัว2</label>
+
+    <input type="checkbox" name="chronic1" id="chronic3">
+    <label for="chronic3">โรคประจำตัว3</label>
+
+    <input type="checkbox" name="chronic1" id="chronic4">
+    <label for="chronic4">โรคประจำตัว4</label>
+  </section>
+
+  <label for="pregnancy">การตั้งครรภ์</label>
+  <select name="pregnancy" id="pregnancy">
+    <option value="yes">ตั้งครรภ์</option>
+    <option value="no">ไม่ตั้งครรภ์</option>
+  </select>
+
+  <input type="submit" value="submit">
+</form>
