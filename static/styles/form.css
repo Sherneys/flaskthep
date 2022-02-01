@@ -1,0 +1,125 @@
+@import url("https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Prompt", sans-serif;
+  /* outline: red 1px solid; */
+}
+
+.flex {
+  display: flex;
+}
+
+.col {
+  flex-direction: column;
+}
+
+.jcc {
+  justify-content: center;
+}
+
+.aic {
+  align-items: center;
+}
+
+.pb-1 {
+  padding-bottom: 1em;
+}
+
+/* ---------------- */
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #5c71f9;
+  overflow: hidden;
+}
+
+h1 {
+  font-size: 5em;
+  color: #fff;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+}
+
+.form-container {
+  min-width: 500px;
+  max-width: 840px;
+  padding: 2em;
+  border-radius: 55px;
+  background-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0px 0px 10px 5px rgba(150, 187, 255, 0.2);
+  backdrop-filter: blur(5px);
+}
+
+.bg-element {
+  position: absolute;
+  z-index: -1;
+}
+
+.bg-left {
+  width: 755px;
+  height: 1128px;
+
+  top: -149px;
+  left: -69px;
+}
+
+.bg-right {
+  right: -10em;
+  bottom: -25em;
+}
+
+form {
+  width: 100%;
+  align-items: flex-start;
+}
+
+label {
+  font-size: 1.7em;
+}
+
+input[type="number"],
+select,
+option,
+.submitBtn:hover input[type="number"],
+select,
+option {
+  font-size: 1.2em;
+  border: none;
+  padding: 1em;
+  border-radius: 1em;
+}
+
+select,
+option,
+.submitBtn {
+  cursor: pointer;
+}
+
+input[type="checkbox"] {
+  border: none;
+}
+
+.submitBtn {
+  position: relative;
+  font-size: 1.6em;
+  padding: 0.7em;
+  width: 6em;
+  border-radius: 5em;
+  background: #fff;
+  border: none;
+  box-shadow: 0px 0px 10px 5px rgba(150, 187, 255, 0.2);
+  transition: all 0.1s;
+}
+
+.submitBtn:hover {
+  transform: scale(1.02);
+  box-shadow: 0px 0px 10px 10px rgba(150, 187, 255, 0.2);
+}

@@ -1,6 +1,8 @@
 # Flask Setup
 import os
-from flask import Flask, jsonify, request, abort, render_template
+from flask import Flask, jsonify, redirect, request, abort, render_template, url_for
+from pandas import read_sql_query
+import uuid
 app = Flask(__name__)
 # Google Sheets API Setup
 import gspread
@@ -21,13 +23,65 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
-@app.route('/hello/')
-@app.route('/hello/<name>')
-def hello(name=None):
-    return render_template('index.html', name=name)
+@app.route('/add_form' , methods = ["GET","POST"])
+def form():
 
-# An example GET Route to get all reviews
+    if request.method == "POST":
+        age = request.form["age"]
+        dis = request.form["chronic"]
+        preg = request.form["pregnancy"]
+        gen = request.form["sex"]
+        vaxed= request.form["vaxed"]
+
+        print(f"{age}:{dis}:{preg}:{gen}:{vaxed}")
+
+        if dis == "chronic0":
+            dis = 2
+        else:
+            dis = 1
+
+        vaccine=["Moderna","Pfizer","AstraZeneca","Sinovac","Johnson&Johnson"]
+        age=int(age)
+        arr=[]
+
+        # จัดหมวดหมู่อายุ
+        if age>=12 and age<=17:
+            age=1
+        elif age >=18 and age<=59:
+            age=2
+        elif  age >= 60:
+            age=3
+        else:
+            arr.append("ยังไม่สามารถฉีดได้")
+
+        # cal
+        if len(arr) == 0:
+            if age==1:
+                arr.append(vaccine[1])
+            elif age>1 and dis==1:
+                arr.append(vaccine[0])
+                arr.append(vaccine[2])
+            elif age>2:
+                arr.append(vaccine[2])
+                arr.append(vaccine[4])
+            else:
+                arr.append(vaccine[3])
+
+        arr_str = str(arr)
+
+        gsheet.insert_row([uuid.uuid4(),age,gen,dis,preg,vaxed,arr_str])
+
+        return redirect(url_for("submit"))
+
+    else:
+        return render_template('form.html')
+
+@app.route('/submit', methods = ["GET","POST"])
+def result():
+    return render_template('index.html')
+
 @app.route('/all_reviews', methods=["GET"])
+
 def all_reviews():
     print(gsheet.get_all_records())
     return jsonify(gsheet.get_all_records())
