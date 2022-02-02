@@ -1,7 +1,6 @@
 # Flask Setup
 import os
 from flask import Flask, jsonify, redirect, request, abort, render_template, url_for
-from pandas import read_sql_query
 import uuid
 app = Flask(__name__)
 # Google Sheets API Setup
@@ -87,8 +86,8 @@ def form():
 def result():
     return render_template('index.html')
 
-@app.route('/all_reviews', methods=["GET"])
+# @app.route('/all_reviews', methods=["GET"])
 
-def all_reviews():
-    print(gsheet.get_all_records())
-    return jsonify(gsheet.get_all_records())
+# def all_reviews():
+#     print(gsheet.get_all_records())
+#     return jsonify(gsheet.get_all_records())
