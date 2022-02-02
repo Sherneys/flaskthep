@@ -8,6 +8,10 @@
   /* outline: red 1px solid; */
 }
 
+.seeme {
+  outline: red 1px solid;
+}
+
 .flex {
   display: flex;
 }
@@ -25,7 +29,7 @@
 }
 
 .pb-1 {
-  padding-bottom: 1em;
+  /* padding-bottom: 1em; */
 }
 
 /* ---------------- */
@@ -34,8 +38,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  width: 100vw;
+  min-height: 100vh;
   background: #5c71f9;
   overflow: hidden;
 }
@@ -51,8 +54,11 @@ h1 {
 }
 
 .form-container {
-  min-width: 500px;
+  min-width: 580px;
+  width: 70%;
   max-width: 840px;
+  /* height: 660px; */
+  margin: 1em;
   padding: 2em;
   border-radius: 55px;
   background-color: rgba(255, 255, 255, 0.6);
@@ -74,8 +80,8 @@ h1 {
 }
 
 .bg-right {
-  right: -10em;
-  bottom: -25em;
+  right: -100px;
+  bottom: -500px;
 }
 
 form {
@@ -84,13 +90,13 @@ form {
 }
 
 label {
-  font-size: 1.7em;
+  font-size: 2em;
 }
 
 input[type="number"],
 select,
 option,
-.submitBtn:hover input[type="number"],
+button:hover input[type="number"],
 select,
 option {
   font-size: 1.2em;
@@ -101,7 +107,7 @@ option {
 
 select,
 option,
-.submitBtn {
+button {
   cursor: pointer;
 }
 
@@ -109,11 +115,11 @@ input[type="checkbox"] {
   border: none;
 }
 
-.submitBtn {
+button {
   position: relative;
-  font-size: 1.6em;
-  padding: 0.7em;
-  width: 6em;
+  font-size: 2em;
+  padding: 0.3em;
+  width: 5em;
   border-radius: 5em;
   background: #fff;
   border: none;
@@ -121,7 +127,7 @@ input[type="checkbox"] {
   transition: all 0.1s;
 }
 
-.submitBtn:hover {
+button:hover {
   transform: scale(1.02);
   box-shadow: 0px 0px 10px 10px rgba(150, 187, 255, 0.2);
 }

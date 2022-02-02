@@ -14,7 +14,6 @@ credential = ServiceAccountCredentials.from_json_keyfile_name("credentials.json"
                                                               "https://www.googleapis.com/auth/drive.file",
                                                               "https://www.googleapis.com/auth/drive"])
 client = gspread.authorize(credential)
-gsheet = client.open("Vac").sheet1
 
 
 app = Flask(__name__)
@@ -25,13 +24,16 @@ def home():
 
 @app.route('/add_form' , methods = ["GET","POST"])
 def form():
-
+    gsheet = client.open("Vac").sheet1
+    count = gsheet.row_count
+    print(count)
     if request.method == "POST":
         age = request.form["age"]
         dis = request.form["chronic"]
         preg = request.form["pregnancy"]
         gen = request.form["sex"]
         vaxed= request.form["vaxed"]
+
 
         print(f"{age}:{dis}:{preg}:{gen}:{vaxed}")
 
@@ -42,6 +44,7 @@ def form():
 
         vaccine=["Moderna","Pfizer","AstraZeneca","Sinovac","Johnson&Johnson"]
         age=int(age)
+        age_dis = age
         arr=[]
 
         # จัดหมวดหมู่อายุ
@@ -69,9 +72,13 @@ def form():
 
         arr_str = str(arr)
 
-        gsheet.insert_row([uuid.uuid4(),age,gen,dis,preg,vaxed,arr_str])
-
-        return redirect(url_for("submit"))
+        count = gsheet.row_count
+        print(count)
+        new_row = count+1
+        gsheet.resize(new_row)
+        gsheet.insert_row([str(uuid.uuid4()),age_dis,gen,dis,preg,vaxed,arr_str],index = count+1)
+        gsheet.delete_row(new_row+1)
+        return redirect(url_for("result"))
 
     else:
         return render_template('form.html')
