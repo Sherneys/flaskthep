@@ -69,8 +69,13 @@ def form():
             else:
                 arr.append(vaccine[3])
 
-        arr_str = str(arr)
+        global arr_str
+        arr_str = ''
+        for i in arr:
+            arr_str += i + " "
 
+        arr_str = arr_str[:-1]
+        
         count = gsheet.row_count
         print(count)
         new_row = count+1
@@ -84,7 +89,7 @@ def form():
 
 @app.route('/submit', methods = ["GET","POST"])
 def result():
-    return render_template('index.html')
+    return render_template('result.html',arr = arr_str)
 
 # @app.route('/all_reviews', methods=["GET"])
 
