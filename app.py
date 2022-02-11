@@ -1,10 +1,12 @@
 # Flask Setup
-import os ,uuid ,random
-from flask import Flask, jsonify, redirect, request, abort, render_template, url_for
+import os ,uuid ,random ,pandas
+from flask import Flask, jsonify, redirect, request, abort, render_template, url_for, session
 app = Flask(__name__)
 # Google Sheets API Setup
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+
+from datetime import date, datetime
 
 credential = ServiceAccountCredentials.from_json_keyfile_name("credentials.json",
                                                              ["https://spreadsheets.google.com/feeds",
@@ -26,6 +28,10 @@ def form():
     count = gsheet.row_count
     print(count)
     if request.method == "POST":
+
+        global email , arr_str
+
+        email = request.form["email"]
         age = request.form["age"]
         dis = request.form["chronic"]
         preg = request.form["pregnancy"]
@@ -33,7 +39,7 @@ def form():
         vaxed= request.form["vaxed"]
 
 
-        print(f"{age}:{dis}:{preg}:{gen}:{vaxed}")
+        print(f"{email}:{age}:{dis}:{preg}:{gen}:{vaxed}")
 
         dis_dis = dis
 
@@ -55,31 +61,27 @@ def form():
         elif  age >= 60:
             age=3
         else:
-            arr.append("ยังไม่สามารถฉีดได้")
+            arr_str = "ยังไม่สามารถฉีดได้"
 
         # cal
         if len(arr) == 0:
             if age==1:
-                arr.append(vaccine[1])
+                arr_str = vaccine[1]
             elif age>1 and dis==1:
-                arr.append(random.choice([vaccine[0],vaccine[2]]))
+                arr_str = random.choice([vaccine[0],vaccine[2]])
             elif age>2:
-                arr.append(random.choice([vaccine[2],vaccine[4]]))
+                arr_str = random.choice([vaccine[2],vaccine[4]])
             else:
-                arr.append(vaccine[3])
+                arr_str = vaccine[3]
 
-        global arr_str
-        arr_str = ''
-        for i in arr:
-            arr_str += i + " "
+        now = datetime.now()
+        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
 
-        arr_str = arr_str[:-1]
-        
         count = gsheet.row_count
         print(count)
         new_row = count+1
         gsheet.resize(new_row)
-        gsheet.insert_row([str(uuid.uuid4()),age_dis,gen,dis_dis,preg,vaxed,arr_str],index = count+1)
+        gsheet.insert_row([email,age_dis,gen,dis_dis,preg,vaxed,arr_str,dt_string],index = count+1)
         gsheet.delete_row(new_row+1)
         return redirect(url_for("result"))
 
@@ -96,29 +98,57 @@ def login():
         usr = request.form["username"]
         pwd = request.form["password"]
         if usr == "admin" and pwd == "1234":
+            global key
+            key = 'true'
+            print (key)
             return redirect(url_for("review_data"))
         else :
-            return redirect(url_for("failed"))
+            return '<h1>email หรือ password ผิด</h1>'
     else :
         return render_template('login.html')
 
-@app.route('/failed', methods=["GET","POST"])
-def failed():
-        return render_template('failed.html')
-
-@app.route('/review_data')
+@app.route('/review_data', methods=["GET","POST"])
 def review_data():
+    global key
+    key = key
+    print(key)
+    if key == 'true':
+        key = 'false'
+        gsheet = client.open("Vac").sheet1
+        data = gsheet.col_values(7)
+
+        pf = data.count("Pfizer")
+        az = data.count("AstraZeneca")
+        jj = data.count("Johnson&Johnson")
+        sn = data.count("Sinovac")
+        md = data.count("Moderna")
+
+        print(data)
+        
+        
+        return render_template('review_data.html',pf = pf,az = az,jj = jj,sn = sn,md = md)
+
+@app.route('/path', methods=["GET","POST"])
+def path():
     gsheet = client.open("Vac").sheet1
-    data = gsheet.col_values(7)
+    if request.method == "POST":
+        email_his = request.form("email_his")
+        cell_list = gsheet.findall(email_his)
 
-    pf = data.count("Pfizer")
-    aze = data.count("AstraZeneca Johnson&Johnson") + data.count("Moderna AstraZeneca")
-    john = data.count("AstraZenecan Johnson&Johnson")
-    sin = data.count("Sinovac")
-    mod = data.count("Moderna AstraZeneca")
+        if len(cell_list) == 0:
+            return redirect(url_for(find_his), cell_list = cell_list)
+        else :
+            return '<h1>ไม่พบข้อมูล</h1>'
+    else:
+        return render_template('path_to_find_his.html')
 
-    print(data)
-    
-    
-    # return render_template('review_data.html',pf = pf,aze = aze,john = john,sin = sin,mod = mod)
-    return "<h1>{data}</h1>"
+@app.route('/find_his', methods=["GET","POST"])
+def find_his(cell_list):
+    gsheet = client.open("Vac").sheet1
+    data_his = []
+    for i in cell_list:
+        data_his.append(gsheet.cell(i[0],7).value)
+
+    print(data_his)
+
+    return render_template('find_his.html',data_his = data_his)

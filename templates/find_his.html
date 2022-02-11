@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/login.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/history.css') }}">
   </head>
     <body>
         <svg
@@ -34,24 +34,21 @@
             fill="#7285ff"
           />
         </svg>
-    
         <div class="container flex col jcc aic">
-          <h1>Login</h1>
-          <div class="form-container flex col jcc aic">
-            <form action="#" method="post" class="flex col aic">
-              <div class="input-container">
-                <div class="pb-1 flex col">
-                  <label for="username">username</label>
-                  <input type="username" name="username" id="username">
-                  <label for="password">password</label>
-                  <input type="password" name="password" id="password">
-                </div>
-                
-              </div>
-              <a href=""
-                ><input type="submit" value="submit" class="loginBtn"
-              /></a>
-            </form>
-          </div>
+            <table>
+                <tr>
+                  <th>date</th>
+                  <th>email</th>
+                  <th>recommendation</th>
+                </tr>
+                {% for row in data_his %}
+                <tr>
+                  {% for i in row%}
+                  <td>{{}}</td>
+                  {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
     </body>
 </html>

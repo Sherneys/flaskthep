@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/summary.css') }}">
+  </head>
+    <body>
+        
+        <div class="container flex col jcc aic">
+            <h1>Summary</h1>
+            <div class="summary-container flex col jcc aic">
+                <ul class="sum-list">
+                    <li class="sum-item">
+                        <h4>Pfizer</h4>
+                        <p>{{pf}}</p>
+                    </li>
+                    <li class="sum-item">
+                        <h4>Moderna</h4>
+                        <p>{{md}}</p>
+                    </li>
+                    <li class="sum-item">
+                        <h4>Astra</h4>
+                        <p>{{az}}</p>
+                    </li>
+                    <li class="sum-item">
+                        <h4>Sinovac</h4>
+                        <p>{{sn}}</p>
+                    </li>
+                    <li class="sum-item">
+                        <h4>J&J</h4>
+                        <p>{{jj}}</p>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </body>
+</html>
