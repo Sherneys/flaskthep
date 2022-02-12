@@ -90,6 +90,7 @@ def form():
 
 @app.route('/submit', methods = ["GET","POST"])
 def result():
+    global arr_str
     return render_template('result.html',arr = arr_str)
 
 @app.route('/login', methods=["GET","POST"])
