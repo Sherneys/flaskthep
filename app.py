@@ -1,5 +1,5 @@
 # Flask Setup
-import os ,uuid ,random ,pandas
+import os ,random
 from flask import Flask, jsonify, redirect, request, abort, render_template, url_for, session
 app = Flask(__name__)
 # Google Sheets API Setup
