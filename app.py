@@ -111,7 +111,6 @@ def login():
 @app.route('/review_data', methods=["GET","POST"])
 def review_data():
     global key
-    key = key
     print(key)
     if key == 'true':
         key = 'false'
