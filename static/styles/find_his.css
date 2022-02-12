@@ -1,0 +1,128 @@
+@import url("https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Prompt", sans-serif;
+  /* outline: red 1px solid; */
+}
+
+.seeme {
+  outline: red 1px solid;
+}
+
+.flex {
+  display: flex;
+}
+
+.col {
+  flex-direction: column;
+}
+
+.col {
+  flex-direction: column;
+}
+
+.jcc {
+  justify-content: center;
+}
+
+.aic {
+  align-items: center;
+}
+
+.tac {
+  text-align: center;
+}
+
+/* ---------------- */
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #5c71f9;
+  overflow: hidden;
+}
+h1 {
+  font-size: 5em;
+  color: #fff;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+}
+
+.form-container {
+  min-width: 580px;
+  width: 70%;
+  max-width: 840px;
+  margin: 1em;
+  padding: 2em;
+  border-radius: 55px;
+  background-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0px 0px 10px 5px rgba(150, 187, 255, 0.2);
+  backdrop-filter: blur(5px);
+}
+
+table {
+  color: #fff;
+  font-size: 1.5em;
+}
+
+table tr:first-child th:first-child {
+  border-top-left-radius: 25px;
+}
+
+table tr:first-child th:last-child {
+  border-top-right-radius: 25px;
+}
+
+table tr:last-child td:first-child {
+  border-bottom-left-radius: 25px;
+}
+
+table tr:last-child td:last-child {
+  border-bottom-right-radius: 25px;
+}
+
+th,td {
+  /* outline: solid 1px black; */
+  padding: 1em;
+}
+
+th {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+td {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+
+
+.bg-element {
+  position: absolute;
+  z-index: -1;
+}
+
+.bg-left {
+  width: 755px;
+  height: 1128px;
+
+  top: -149px;
+  left: -69px;
+}
+
+.bg-right {
+  right: -100px;
+  bottom: -500px;
+}
+
+form {
+  width: 100%;
+  align-items: flex-start;
+}

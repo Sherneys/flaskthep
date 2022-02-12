@@ -132,22 +132,32 @@ def review_data():
 def path():
     gsheet = client.open("Vac").sheet1
     if request.method == "POST":
-        email_his = request.form("email_his")
+        email_his = request.form["email_his"]
+        global cell_list
         cell_list = gsheet.findall(email_his)
-
-        if len(cell_list) == 0:
-            return redirect(url_for(find_his), cell_list = cell_list)
+        print(email_his)
+        print(cell_list)
+        if len(cell_list) != 0:
+            return redirect(url_for("find_his"))
         else :
             return '<h1>ไม่พบข้อมูล</h1>'
     else:
         return render_template('path_to_find_his.html')
 
 @app.route('/find_his', methods=["GET","POST"])
-def find_his(cell_list):
+def find_his():
     gsheet = client.open("Vac").sheet1
     data_his = []
+    row_list=[]
+
     for i in cell_list:
-        data_his.append(gsheet.cell(i[0],7).value)
+        row_list.append(i.row)
+    
+    for i in row_list:
+        data_temp = []
+        data_temp.append(gsheet.cell(i,8).value)
+        data_temp.append(gsheet.cell(i,7).value)
+        data_his.append(data_temp)
 
     print(data_his)
 

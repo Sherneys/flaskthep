@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/history.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/find_his.css') }}">
   </head>
     <body>
         <svg
@@ -38,13 +38,12 @@
             <table>
                 <tr>
                   <th>date</th>
-                  <th>email</th>
                   <th>recommendation</th>
                 </tr>
                 {% for row in data_his %}
                 <tr>
                   {% for i in row%}
-                  <td>{{}}</td>
+                  <td>{{i}}</td>
                   {% endfor %}
                 </tr>
                 {% endfor %}
