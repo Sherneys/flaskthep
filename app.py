@@ -44,9 +44,9 @@ def form():
         dis_dis = dis
 
         if dis == "chronic0" and preg == "no":
-            dis = 2
+            dis=2
         else:
-            dis = 1
+            dis=1
 
         vaccine=["Moderna","Pfizer","AstraZeneca","Sinovac","Johnson&Johnson"]
         age=int(age)
