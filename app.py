@@ -79,7 +79,7 @@ def form():
 
         count = gsheet.row_count
         print(count)
-        new_row = count+1
+        new_row=count+1
         gsheet.resize(new_row)
         gsheet.insert_row([email,age_dis,gen,dis_dis,preg,vaxed,arr_str,dt_string],index = count+1)
         gsheet.delete_row(new_row+1)
