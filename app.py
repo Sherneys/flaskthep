@@ -1,32 +1,46 @@
 # Flask Setup
-import random
-from flask import Flask, jsonify, redirect, request, abort, render_template, url_for, session
-app = Flask(__name__)
-# Google Sheets API Setup
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
-
+import random, psycopg2, os
 from datetime import date, datetime
+from flask import Flask, jsonify, redirect, request, abort, render_template, url_for
+app = Flask(__name__)
 
-credential = ServiceAccountCredentials.from_json_keyfile_name("credentials.json",
-                                                             ["https://spreadsheets.google.com/feeds",
-                                                              "https://www.googleapis.com/auth/spreadsheets",
-                                                              "https://www.googleapis.com/auth/drive.file",
-                                                              "https://www.googleapis.com/auth/drive"])
-client = gspread.authorize(credential)
+def connection():
+    conn = psycopg2.connect(
+            host="ec2-3-222-49-168.compute-1.amazonaws.com",
+            database="d339viqu0kank6",
+            user=os.environ['DB_USERNAME'],
+            password=os.environ['DB_PASSWORD'])
+            
+    cur = conn.cursor()
+
+    return cur
+# Google Sheets API Setup
+# import gspread
+# from oauth2client.service_account import ServiceAccountCredentials
+
+# credential = ServiceAccountCredentials.from_json_keyfile_name("credentials.json",
+#                                                              ["https://spreadsheets.google.com/feeds",
+#                                                               "https://www.googleapis.com/auth/spreadsheets",
+#                                                               "https://www.googleapis.com/auth/drive.file",
+#                                                               "https://www.googleapis.com/auth/drive"])
+# client = gspread.authorize(credential)
 
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
+    if connection() is not None :
+        print("connect success")
+    else :
+        print("Error connection")
     return render_template('index.html')
 
 @app.route('/add_form' , methods = ["GET","POST"])
 def form():
-    gsheet = client.open("Vac").sheet1
-    count = gsheet.row_count
-    print(count)
+    # gsheet = client.open("Vac").sheet1
+    # count = gsheet.row_count
+    # print(count)
     if request.method == "POST":
 
         global email , arr_str
