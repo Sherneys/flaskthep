@@ -11,36 +11,38 @@ def connection():
             user=os.environ['DB_USERNAME'],
             password=os.environ['DB_PASSWORD'])
             
+    return conn
+
+def insert(a):
+    conn = connection()
     cur = conn.cursor()
+    cur.execute(a)
 
-    return cur
-# Google Sheets API Setup
-# import gspread
-# from oauth2client.service_account import ServiceAccountCredentials
+    conn.commit()
+    cur.close()
+    conn.close()
 
-# credential = ServiceAccountCredentials.from_json_keyfile_name("credentials.json",
-#                                                              ["https://spreadsheets.google.com/feeds",
-#                                                               "https://www.googleapis.com/auth/spreadsheets",
-#                                                               "https://www.googleapis.com/auth/drive.file",
-#                                                               "https://www.googleapis.com/auth/drive"])
-# client = gspread.authorize(credential)
+def select(a):
+    conn = connection()
+    cur = conn.cursor()
+    cur.execute(a)
+    result = cur.fetchall()
 
+    cur.close()
+    conn.close()
+
+    return result
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    if connection() is not None :
-        print("connect success")
-    else :
-        print("Error connection")
+    result = select('''SELECT * FROM public."Vac" WHERE "ID" = 1''')
+    print(result)
     return render_template('index.html')
 
 @app.route('/add_form' , methods = ["GET","POST"])
 def form():
-    # gsheet = client.open("Vac").sheet1
-    # count = gsheet.row_count
-    # print(count)
     if request.method == "POST":
 
         global email , arr_str
@@ -89,14 +91,13 @@ def form():
                 arr_str = vaccine[3]
 
         now = datetime.now()
-        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+        dt_string = now.strftime("%Y/%m/%d")
 
-        count = gsheet.row_count
-        print(count)
-        new_row=count+1
-        gsheet.resize(new_row)
-        gsheet.insert_row([email,age_dis,gen,dis_dis,preg,vaxed,arr_str,dt_string],index = count+1)
-        gsheet.delete_row(new_row+1)
+
+        statement = f'''INSERT INTO public."Vac"(
+	"Email", "Age", "Sex", "Chornic", "Pregnancy", "Vaxed", "Vac Reccommend", "Date")
+	VALUES ('{email}',{age_dis},'{gen}','{dis_dis}','{preg}','{vaxed}','{arr_str}','{dt_string}')'''
+        insert(statement)
         return redirect(url_for("result"))
 
     else:
@@ -127,50 +128,39 @@ def review_data():
     global key
     if key == 'true':
         key = 'false'
-        gsheet = client.open("Vac").sheet1
-        data = gsheet.col_values(7)
+        statement = '''SELECT "Vac Reccommend" FROM public."Vac"'''
+        data = select(statement)
 
-        pf = data.count("Pfizer")
-        az = data.count("AstraZeneca")
-        jj = data.count("Johnson&Johnson")
-        sn = data.count("Sinovac")
-        md = data.count("Moderna")
+        data_new=[]
+        for i in range (len(data)):
+            data_new.append(data[i][0])
 
-        print(data)
+        pf = data_new.count('Pfizer              ')
+        az = data_new.count('AstraZeneca         ')
+        jj = data_new.count('Johnson&Johnson     ')
+        sn = data_new.count('Sinovac             ')
+        md = data_new.count('Moderna             ')
+
+        print(data_new) 
         
         
         return render_template('review_data.html',pf = pf,az = az,jj = jj,sn = sn,md = md)
 
 @app.route('/path', methods=["GET","POST"])
 def path():
-    gsheet = client.open("Vac").sheet1
     if request.method == "POST":
+        global email_his
         email_his = request.form["email_his"]
-        global cell_list
-        cell_list = gsheet.findall(email_his)
         print(email_his)
-        print(cell_list)
-        if len(cell_list) != 0:
-            return redirect(url_for("find_his"))
-        else :
-            return '<h1>ไม่พบข้อมูล</h1>'
+        return redirect(url_for("find_his"))
     else:
         return render_template('path_to_find_his.html')
 
 @app.route('/find_his', methods=["GET","POST"])
 def find_his():
-    gsheet = client.open("Vac").sheet1
-    data_his = []
-    row_list=[]
-
-    for i in cell_list:
-        row_list.append(i.row)
-    
-    for i in row_list:
-        data_temp = []
-        data_temp.append(gsheet.cell(i,8).value)
-        data_temp.append(gsheet.cell(i,7).value)
-        data_his.append(data_temp)
+    global email_his
+    data_his = select(f'''SELECT "Date", "Vac Reccommend"
+	    FROM public."Vac" WHERE "Email" = '{email_his}' ''')
 
     print(data_his)
 
