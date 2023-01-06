@@ -37,7 +37,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    result = select('''SELECT * FROM public."Vac" WHERE "ID" = 1''')
+    result = select('SELECT * FROM public."Vac" WHERE "ID" = 1')
     print(result)
     return render_template('index.html')
 
