@@ -1,2 +1,2 @@
-# flaskthep ไม่มีอะไรงานส่งครูเฉยๆ...
+# flaskthep
 https://flaskthep.herokuapp.com/
